@@ -18,15 +18,20 @@ app.use('/api/cart', require('./routes/cart'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/admin', require('./routes/admin'));
 
-// Health check
-app.get('/', (req, res) => res.json({ message: 'ShopNest API Running' }));
+// Health check route (ONLY ONE)
+app.get("/", (req, res) => {
+  res.json({ message: "ShopNest API Running" });
+});
 
-// Connect to MongoDB
+// Connect to MongoDB + start server
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log('✅ MongoDB Connected');
-    app.listen(process.env.PORT, () => {
-      console.log(`🚀 Server running on http://localhost:${process.env.PORT}`);
+
+    const PORT = process.env.PORT || 5000;
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
     });
   })
   .catch(err => {
